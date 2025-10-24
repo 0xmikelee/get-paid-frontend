@@ -35,12 +35,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.17.1
- * Query Engine version: 272a37d34178c2894197e17273bf937f25acdeac
+ * Prisma Client JS version: 6.18.0
+ * Query Engine version: 34b5a692b7bd79939a9a2c3ef97d816e749cda2f
  */
 Prisma.prismaVersion = {
-  client: "6.17.1",
-  engine: "272a37d34178c2894197e17273bf937f25acdeac"
+  client: "6.18.0",
+  engine: "34b5a692b7bd79939a9a2c3ef97d816e749cda2f"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -86,9 +86,6 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -122,40 +119,15 @@ exports.Prisma.ProjectScalarFieldEnum = {
   vaultAddress: 'vaultAddress'
 };
 
-exports.Prisma.TaskScalarFieldEnum = {
-  id: 'id',
-  projectId: 'projectId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  title: 'title',
-  description: 'description',
-  status: 'status',
-  priority: 'priority',
-  dueDate: 'dueDate',
-  assignedAt: 'assignedAt',
-  taskCost: 'taskCost'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
-};
-
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.TaskStatus = exports.$Enums.TaskStatus = {
-  PENDING: 'PENDING',
-  IN_PROGRESS: 'IN_PROGRESS',
-  COMPLETED: 'COMPLETED'
-};
-
 exports.ProjectStatus = exports.$Enums.ProjectStatus = {
   PENDING: 'PENDING',
   IN_PROGRESS: 'IN_PROGRESS',
@@ -165,8 +137,7 @@ exports.ProjectStatus = exports.$Enums.ProjectStatus = {
 exports.Prisma.ModelName = {
   Client: 'Client',
   Company: 'Company',
-  Project: 'Project',
-  Task: 'Task'
+  Project: 'Project'
 };
 /**
  * Create the Client
@@ -201,13 +172,12 @@ const config = {
     "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "../../../../prisma",
-  "clientVersion": "6.17.1",
-  "engineVersion": "272a37d34178c2894197e17273bf937f25acdeac",
+  "clientVersion": "6.18.0",
+  "engineVersion": "34b5a692b7bd79939a9a2c3ef97d816e749cda2f",
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "postgresql",
-  "postinstall": false,
+  "activeProvider": "sqlite",
   "inlineDatasources": {
     "db": {
       "url": {
@@ -216,13 +186,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Client {\n  id            Int       @id @default(autoincrement())\n  email         String    @unique\n  password      String\n  createdAt     DateTime  @default(now())\n  projects      Project[]\n  walletAddress String?   @unique\n  // You can add more fields, like name, etc...\n}\n\nmodel Company {\n  id            Int       @id @default(autoincrement())\n  email         String    @unique\n  walletAddress String?   @unique\n  password      String\n  createdAt     DateTime  @default(now())\n  projects      Project[]\n  // Other fields like companyName, address, etc...\n}\n\nmodel Project {\n  id           Int           @id @default(autoincrement())\n  companyId    Int\n  company      Company       @relation(fields: [companyId], references: [id])\n  clientId     Int\n  client       Client        @relation(fields: [clientId], references: [id])\n  tasks        Task[]\n  createdAt    DateTime      @default(now())\n  updatedAt    DateTime      @updatedAt\n  title        String\n  description  String\n  status       ProjectStatus\n  priority     Int\n  projectCost  Float\n  vaultAddress String        @unique\n}\n\nmodel Task {\n  id          Int        @id @default(autoincrement())\n  projectId   Int\n  project     Project    @relation(fields: [projectId], references: [id])\n  createdAt   DateTime   @default(now())\n  updatedAt   DateTime   @updatedAt\n  title       String\n  description String\n  status      TaskStatus\n  priority    Int\n  dueDate     DateTime\n  assignedAt  DateTime\n  taskCost    Float\n}\n\nenum TaskStatus {\n  PENDING\n  IN_PROGRESS\n  COMPLETED\n}\n\nenum ProjectStatus {\n  PENDING\n  IN_PROGRESS\n  COMPLETED\n}\n",
-  "inlineSchemaHash": "5b5f834aefd9226ed7752f175abc27f50f320e5389e235aac9f0520e23c55078",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Client {\n  id            Int       @id @default(autoincrement())\n  email         String    @unique\n  password      String\n  createdAt     DateTime  @default(now())\n  walletAddress String?   @unique\n  projects      Project[]\n}\n\nmodel Company {\n  id            Int       @id @default(autoincrement())\n  email         String    @unique\n  walletAddress String?   @unique\n  password      String\n  createdAt     DateTime  @default(now())\n  projects      Project[]\n}\n\nmodel Project {\n  id           Int           @id @default(autoincrement())\n  companyId    Int\n  clientId     Int\n  createdAt    DateTime      @default(now())\n  updatedAt    DateTime      @updatedAt\n  title        String\n  description  String\n  status       ProjectStatus\n  priority     Int?\n  projectCost  Float\n  vaultAddress String        @unique\n  company      Company       @relation(fields: [companyId], references: [id])\n  client       Client        @relation(fields: [clientId], references: [id])\n}\n\nenum ProjectStatus {\n  PENDING\n  IN_PROGRESS\n  COMPLETED\n}\n",
+  "inlineSchemaHash": "6b2d1873928f206985d43bdf6fcd9e68a818a0f012c7db8ce9af76481ac44a93",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Client\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"projects\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"ClientToProject\"},{\"name\":\"walletAddress\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"Company\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"walletAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"projects\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"CompanyToProject\"}],\"dbName\":null},\"Project\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"Company\",\"relationName\":\"CompanyToProject\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"client\",\"kind\":\"object\",\"type\":\"Client\",\"relationName\":\"ClientToProject\"},{\"name\":\"tasks\",\"kind\":\"object\",\"type\":\"Task\",\"relationName\":\"ProjectToTask\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"ProjectStatus\"},{\"name\":\"priority\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"projectCost\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"vaultAddress\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"Task\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"projectId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"project\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"ProjectToTask\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"TaskStatus\"},{\"name\":\"priority\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"dueDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"assignedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"taskCost\",\"kind\":\"scalar\",\"type\":\"Float\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Client\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"walletAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"projects\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"ClientToProject\"}],\"dbName\":null},\"Company\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"walletAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"projects\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"CompanyToProject\"}],\"dbName\":null},\"Project\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"clientId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"ProjectStatus\"},{\"name\":\"priority\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"projectCost\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"vaultAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"Company\",\"relationName\":\"CompanyToProject\"},{\"name\":\"client\",\"kind\":\"object\",\"type\":\"Client\",\"relationName\":\"ClientToProject\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

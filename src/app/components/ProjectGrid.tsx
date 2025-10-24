@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 
 export const ProjectGrid = () => {
   const { address } = useAccount();
@@ -32,7 +33,7 @@ export const ProjectGrid = () => {
   return (
     <>
       {address ? (
-        <div className="container py-10">
+        <div>
           <label htmlFor="role">
             <b>Role:</b>
           </label>
@@ -48,20 +49,30 @@ export const ProjectGrid = () => {
               <TableRow>
                 <TableHead>Project</TableHead>
                 <TableHead>Description</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>View</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {projects.map((project) => (
-                <TableRow key={project.id}>
+                <TableRow key={project.id} className="cursor-pointer">
                   <TableCell>{project.title}</TableCell>
                   <TableCell>{project.description}</TableCell>
+                  <TableCell>{project.status}</TableCell>
+                  <TableCell>
+                    <Link href={`/project/${project.id}`}>
+                      <button>View</button>
+                    </Link>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
       ) : (
-        <div>Connect your wallet to view projects</div>
+        <div className="container py-10 text-center">
+          Connect your wallet to view projects
+        </div>
       )}
     </>
   );

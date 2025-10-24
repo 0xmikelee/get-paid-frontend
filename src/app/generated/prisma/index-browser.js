@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.17.1
- * Query Engine version: 272a37d34178c2894197e17273bf937f25acdeac
+ * Prisma Client JS version: 6.18.0
+ * Query Engine version: 34b5a692b7bd79939a9a2c3ef97d816e749cda2f
  */
 Prisma.prismaVersion = {
-  client: "6.17.1",
-  engine: "272a37d34178c2894197e17273bf937f25acdeac"
+  client: "6.18.0",
+  engine: "34b5a692b7bd79939a9a2c3ef97d816e749cda2f"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -114,9 +114,6 @@ Prisma.NullTypes = {
  */
 
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -150,28 +147,9 @@ exports.Prisma.ProjectScalarFieldEnum = {
   vaultAddress: 'vaultAddress'
 };
 
-exports.Prisma.TaskScalarFieldEnum = {
-  id: 'id',
-  projectId: 'projectId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  title: 'title',
-  description: 'description',
-  status: 'status',
-  priority: 'priority',
-  dueDate: 'dueDate',
-  assignedAt: 'assignedAt',
-  taskCost: 'taskCost'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
-};
-
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
@@ -184,17 +162,10 @@ exports.ProjectStatus = exports.$Enums.ProjectStatus = {
   COMPLETED: 'COMPLETED'
 };
 
-exports.TaskStatus = exports.$Enums.TaskStatus = {
-  PENDING: 'PENDING',
-  IN_PROGRESS: 'IN_PROGRESS',
-  COMPLETED: 'COMPLETED'
-};
-
 exports.Prisma.ModelName = {
   Client: 'Client',
   Company: 'Company',
-  Project: 'Project',
-  Task: 'Task'
+  Project: 'Project'
 };
 
 /**
