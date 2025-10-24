@@ -3,7 +3,7 @@
 import { useAccount } from "wagmi";
 import { useTransition, useState, useEffect, useRef } from "react";
 import { getProjects } from "@/data/queries";
-import { Project } from "@/app/generated/prisma";
+import { Project, ProjectStatus } from "@/app/generated/prisma";
 import {
   Table,
   TableBody,
@@ -29,7 +29,22 @@ export const ProjectGrid = () => {
   const { address } = useAccount();
   const [projects, setProjects] = useState<Project[]>([]);
   const [role, setRole] = useState<"client" | "company">("client");
-  const [state, formAction] = useActionState(updateProjectStatus, null);
+  const [state, formAction, isPending] = useActionState(
+    updateProjectStatus,
+    null
+  );
+
+  const renderProjectStatus = (status: ProjectStatus) => {
+    switch (status) {
+      case "PENDING":
+        return "Pending";
+      case "IN_PROGRESS":
+        return "In Progress";
+      case "COMPLETED":
+        return "Completed";
+    }
+  };
+
   useEffect(() => {
     if (!address) return;
     const getAddress = async () => {
@@ -81,6 +96,7 @@ export const ProjectGrid = () => {
                         <Field>
                           <Select
                             name="status"
+                            disabled={isPending}
                             onValueChange={(value) => {
                               // Find the closest form and submit it
                               // We'll use document.activeElement to help find the current input
@@ -99,7 +115,11 @@ export const ProjectGrid = () => {
                             defaultValue={project.status}
                           >
                             <SelectTrigger>
-                              <SelectValue placeholder={project.status} />
+                              <SelectValue
+                                placeholder={renderProjectStatus(
+                                  project.status
+                                )}
+                              />
                             </SelectTrigger>
                             <SelectContent className="bg-white">
                               <SelectItem value="PENDING">Pending</SelectItem>
