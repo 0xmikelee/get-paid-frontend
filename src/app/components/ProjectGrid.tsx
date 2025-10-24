@@ -96,7 +96,9 @@ export const ProjectGrid = () => {
                         <Field>
                           <Select
                             name="status"
-                            disabled={isPending}
+                            disabled={
+                              isPending || project.status === "COMPLETED"
+                            }
                             onValueChange={(value) => {
                               // Find the closest form and submit it
                               // We'll use document.activeElement to help find the current input
