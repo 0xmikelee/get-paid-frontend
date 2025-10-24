@@ -112,3 +112,21 @@ export async function createCompany(prevState: unknown, formData: FormData) {
     throw error;
   }
 }
+
+export async function updateProjectStatus(
+  prevState: unknown,
+  formData: FormData
+) {
+  const projectId = parseInt(formData.get("projectId") as string);
+  const status = formData.get("status") as ProjectStatus;
+  console.log(projectId, status);
+  try {
+    const project = await prisma.project.update({
+      where: { id: projectId },
+      data: { status },
+    });
+  } catch (error) {
+    console.error("Error updating project status:", error);
+    throw error;
+  }
+}
